@@ -1,17 +1,17 @@
-import { Home, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 
-function Sidebar({ setPage }) {
+function Sidebar() {
   return (
     <div className="sidebar">
-      <h2>⚡</h2>
+      <h2>EduCore</h2>
 
-      <button onClick={() => setPage("dashboard")}>
-        <Home size={20} />
-      </button>
-
-      <button onClick={() => setPage("students")}>
-        <Users size={20} />
-      </button>
+      <nav>
+        <Link to="/dashboard">Dashboard</Link>
+        <br />
+        <Link to="/blog">Blog</Link>
+        <br />
+        <Link to="/admission">Admission</Link>
+      </nav>
     </div>
   );
 }
