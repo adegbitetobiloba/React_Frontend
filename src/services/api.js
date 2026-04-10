@@ -1,39 +1,34 @@
-const API = "https://week3-crud-todo-api-nge7.onrender.com";
+const BASE_URL = "https://week3-crud-todo-api-nge7.onrender.com/api/auth";
 
-export async function loginUser(email, password) {
-  const res = await fetch(`${API}/login`, {
+// REGISTER
+export async function registerUser(data) {
+  const res = await fetch(`${BASE_URL}/register`, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ email, password })
-  });
-
-  return res.json();
-}
-
-export async function getStudents(token) {
-  const res = await fetch(`${API}/students`, {
-    headers: { Authorization: "Bearer " + token }
-  });
-
-  return res.json();
-}
-
-export async function addStudent(data, token) {
-  const res = await fetch(`${API}/students`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token
-    },
     body: JSON.stringify(data)
   });
 
   return res.json();
 }
 
-export async function deleteStudent(id, token) {
-  await fetch(`${API}/students/${id}`, {
-    method: "DELETE",
-    headers: { Authorization: "Bearer " + token }
+// VERIFY OTP
+export async function verifyOtp(data) {
+  const res = await fetch(`${BASE_URL}/verify-otp`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(data)
   });
+
+  return res.json();
+}
+
+// LOGIN
+export async function loginUser(data) {
+  const res = await fetch(`${BASE_URL}/login`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(data)
+  });
+
+  return res.json();
 }

@@ -1,80 +1,41 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/api";
+import { saveAuth } from "../utils/auth";
 import "../styles/global.css";
 
 function Login() {
+
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    email: "",
-    password: ""
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  function handleChange(e) {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    });
-  }
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
   async function handleLogin() {
-    setLoading(true);
-    setError("");
 
-    try {
-      const data = await loginUser(form.email, form.password);
+    const res = await loginUser({ email, password });
 
-      console.log("LOGIN RESPONSE:", data);
-
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-
-        // 🔥 THIS IS WHAT YOU WERE MISSING
-        navigate("/dashboard");
-
-      } else {
-        setError(data.error || "Login failed");
-      }
-
-    } catch (err) {
-      console.log(err);
-      setError("Something went wrong");
+    if (res.error) {
+      setMessage(res.error);
+    } else {
+      saveAuth(res);
+      navigate("/dashboard");
     }
-
-    setLoading(false);
   }
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
+    <div>
 
-        <h1 className="logo">🎓 EduCore</h1>
-        <p className="subtitle">Welcome back</p>
+      <h2>Login</h2>
 
-        <input
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
+      <input placeholder="Email" onChange={(e)=>setEmail(e.target.value)} />
+      <input placeholder="Password" type="password" onChange={(e)=>setPassword(e.target.value)} />
 
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
+      <button onClick={handleLogin}>Login</button>
 
-        {error && <p className="error">{error}</p>}
+      <p>{message}</p>
 
-        <button onClick={handleLogin}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-
-      </div>
     </div>
   );
 }

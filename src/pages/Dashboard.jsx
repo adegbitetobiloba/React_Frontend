@@ -1,26 +1,28 @@
-import Sidebar from "../components/Sidebar";
+import { getUser, logout } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
+
+  const user = getUser();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate("/login");
+  }
+
   return (
-    <div className="layout">
+    <div>
 
-      <Sidebar />
+      <h1>Welcome {user?.firstName}</h1>
 
-      <div className="main">
+      <p>Role: {user?.role}</p>
 
-        <h1>Dashboard</h1>
+      {user?.role === "visitor" && (
+        <p>Limited access mode</p>
+      )}
 
-        <div className="card">
-          <h3>Total Students</h3>
-          <p>500+</p>
-        </div>
-
-        <div className="card">
-          <h3>Active Courses</h3>
-          <p>12</p>
-        </div>
-
-      </div>
+      <button onClick={handleLogout}>Logout</button>
 
     </div>
   );
